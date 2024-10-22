@@ -1,22 +1,24 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="utf-8">
-        <title>Indonary.id | Product</title>
-        <link rel="icon" href="Image/Logo merah.png" type="image">
-        <link rel="stylesheet" href="css/style.css">
-        <link href="https://fonts.googleapis.com/css2?family=Lato:wght@100;300;400;700;900&display=swap" rel="stylesheet">
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-        <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct" crossorigin="anonymous"></script>
-        
-        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-        <script src="js/product.js"></script>
-    <title>Open Text on Button Click</title>
-    </head>
+<html lang="id">
+<head>
+    <meta charset="utf-8">
+    <title>Indonary.id | Product</title>
+    <link rel="icon" href="Image/Logo merah.png" type="image">
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@100;300;400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfZ2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct" crossorigin="anonymous"></script>
+    
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-storage.js"></script>
+</head>
+
 <body>
     
-<!-----Desain Header--->
+<!-- Desain Header -->
 <div class="header">
     <div class="navbar">
         <div class="logo"> 
@@ -31,10 +33,10 @@
 
         <nav>
             <ul id="MenuItems">
-                <li><a href="/">Home </a> </li>
-                <li><a href="product.html">Product </a> </li>
-                <li><a href="about.html">About Us </a> </li>
-                <li><a href="contact.html">Contact Us </a> </li>
+                <li><a href="/">Home</a></li>
+                <li><a href="product.html">Product</a></li>
+                <li><a href="about.html">About Us</a></li>
+                <li><a href="contact.html">Contact Us</a></li>
             </ul>
         </nav>
         <img src="Image/pngegg.png" class="menu-icon" onclick="menutoggle()">
@@ -42,37 +44,61 @@
 </div>
 
 <div class="container-2">
-    <td>
-        <label class="label-menu">Kategori Menu : </label>
-   </td>
-   <td>
-        <select name="menu_khas">
-            <option>Semua</option>
-            <option>Makassar</option>
-            <option>Bali</option>
-            <option>Trenggalek</option>
-            <option>Magetan</option>
-            <option>Jakarta</option>
-            <option>Lampung</option>
-            <option>Jepara</option>
-        </select>
-    </td>
-    <td>
-        <select name="harga">
-            <option>Terlaris</option>
-            <option>Termurah</option>
-            <option>Termahal</option>
-        </select>
-    </td>
+    <label class="label-menu">Kategori Menu:</label>
+    <select name="menu_khas">
+        <option>Semua</option>
+        <option>Makassar</option>
+        <option>Bali</option>
+        <option>Trenggalek</option>
+        <option>Magetan</option>
+        <option>Jakarta</option>
+        <option>Lampung</option>
+        <option>Jepara</option>
+    </select>
+    <select name="harga">
+        <option>Terlaris</option>
+        <option>Termurah</option>
+        <option>Termahal</option>
+    </select>
 </div>
 
-<!---------Cart Details----->
-<div class="food-container" style="display: grid;
-grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-gap: 20px;
-justify-items: center;">
+<div class="upload-container">
+    <h2>Upload Product</h2>
+    <form id="uploadProductForm" enctype="multipart/form-data">
+        <input type="text" id="productName" placeholder="Nama Produk" required>
+        
+        <select id="productCategory" required>
+            <option value="" disabled selected>Pilih Kategori</option>
+            <option value="Makassar">Makassar</option>
+            <option value="Bali">Bali</option>
+            <option value="Trenggalek">Trenggalek</option>
+            <option value="Magetan">Magetan</option>
+            <option value="Jakarta">Jakarta</option>
+            <option value="Lampung">Lampung</option>
+            <option value="Jepara">Jepara</option>
+        </select>
+        
+        <input type="number" id="productPrice" placeholder="Harga" required>
+        <input type="file" id="productImage" accept="image/*" required>
+        
+        <button type="submit">Upload Produk</button>
+    </form>
+</div>
 
-<!---------footer----->
+<div class="food-container" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 20px; justify-items: center;">
+    <!-- Produk yang diambil dari Firebase akan ditampilkan di sini -->
+</div>
+
+<!-- Tampilan Keranjang Belanja -->
+<div class="cart-container" style="margin-top: 50px;">
+    <h2>Keranjang Belanja</h2>
+    <div class="cart-items" style="display: flex; flex-direction: column; gap: 10px;">
+        <!-- Isi keranjang akan ditampilkan di sini -->
+    </div>
+    <button id="checkoutButton">Checkout</button>
+</div>
+
+<!-- Footer -->
 <div class="footer">
     <div class="navbar-2">
         <div class="footer-col-1">
@@ -83,12 +109,12 @@ justify-items: center;">
             <ul>
                 <li>
                     <i class="fa fa-phone"></i>
-                    <a href="wa.me/6285241542496">  +62 852 4154 2496</a> 
+                    <a href="wa.me/6285241542496">+62 852 4154 2496</a> 
                 </li>
                 <br>
                 <li>
                     <i class="fa fa-envelope"></i>
-                    <a href="https://www.indonary.id">  indonary@gmail.com</a> 
+                    <a href="https://www.indonary.id">indonary@gmail.com</a> 
                 </li>
             </ul>
         </div>
@@ -97,58 +123,176 @@ justify-items: center;">
             <ul>
                 <li>
                     <i class="fa fa-instagram"></i>
-                    <a href="https://www.instagram.com/indonary.id/">  @indonary.id</a> 
+                    <a href="https://www.instagram.com/indonary.id/">@indonary.id</a> 
                 </li>
                 <br>
                 <li>
                     <i class="fa fa-facebook"></i>
-                    <a href="https://www.facebook.com/indonary.id/">  indonary.id</a> 
+                    <a href="https://www.facebook.com/indonary.id/">indonary.id</a> 
                 </li>
             </ul>
         </div>
     </div>
 </div>
 
-<!----java script toggle menu---->
+<!-- JavaScript untuk Menu Toggle dan Fitur Lainnya -->
 <script>
+    // Inisialisasi Firebase
+    const firebaseConfig = {
+        apiKey: "AIzaSyBef-U-wEVon3pBL9_OJZmO_aUCGcqClmM",
+        authDomain: "pkpl-b9107.firebaseapp.com",
+        databaseURL: "https://pkpl-b9107-default-rtdb.firebaseio.com",
+        projectId: "pkpl-b9107",
+        storageBucket: "pkpl-b9107.appspot.com",
+        messagingSenderId: "102677199151",
+        appId: "1:102677199151:web:03dded143f259ec35b89da"
+    };
+    // Inisialisasi Firebase
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database().ref("products"); // Referensi ke Firebase Realtime Database
+    const storage = firebase.storage().ref("product-images"); // Referensi ke Firebase Storage
+
+    // Keranjang belanja
+    let cart = [];
+
+    // Fungsi untuk menampilkan produk yang diambil dari Firebase
+    function fetchProducts() {
+        db.once("value")
+            .then(function (snapshot) {
+                var products = snapshot.val(); // Ambil data produk
+                var productHTML = '';
+                for (var id in products) {
+                    var product = products[id];
+                    productHTML += '<div class="col">';
+                    productHTML += '<img src="' + product.image + '" alt="' + product.name + '">'; // Tampilkan gambar produk
+                    productHTML += '<div class="product-info">';
+                    productHTML += '<h3 class="product-name">' + product.name + '</h3>';
+                    productHTML += '<h4 class="product-price" kategori="' + product.kategori + '" data-price="' + product.price + '">Rp. ' + product.price + '</h4>';
+                    productHTML += '<button class="add-to-cart" data-id="' + id + '">Tambah ke Keranjang</button>';
+                    productHTML += '</div>';
+                    productHTML += '</div>';
+                }
+                $(".food-container").html(productHTML); // Masukkan ke dalam container produk
+
+                // Tambahkan event listener untuk tombol "Tambah ke Keranjang"
+                $(".add-to-cart").click(function() {
+                    var productId = $(this).data("id");
+                    addToCart(productId);
+                });
+            })
+            .catch(function (error) {
+                console.error("Error fetching products: ", error);
+            });
+    }
+
+    // Fungsi untuk menambahkan produk ke keranjang
+    function addToCart(productId) {
+        db.child(productId).once("value").then(function(snapshot) {
+            var product = snapshot.val();
+            cart.push({
+                id: productId,
+                name: product.name,
+                price: product.price,
+                image: product.image
+            });
+            displayCartItems();
+        });
+    }
+
+    // Fungsi untuk menampilkan item di keranjang
+    function displayCartItems() {
+        var cartItemsContainer = document.querySelector('.cart-items');
+        cartItemsContainer.innerHTML = ''; // Kosongkan sebelumnya
+        cart.forEach(function(item) {
+            var itemDiv = document.createElement('div');
+            itemDiv.classList.add('cart-item');
+            itemDiv.innerHTML = `
+                <img src="${item.image}" alt="${item.name}" width="50">
+                <div>${item.name} - Rp. ${item.price}</div>
+                <button class="remove-from-cart" data-id="${item.id}">Hapus</button>
+            `;
+            cartItemsContainer.appendChild(itemDiv);
+        });
+
+        // Tambahkan event listener untuk tombol "Hapus" di keranjang
+        document.querySelectorAll('.remove-from-cart').forEach(function(button) {
+            button.addEventListener('click', function() {
+                var productId = this.dataset.id;
+                removeFromCart(productId);
+            });
+        });
+
+        // Tampilkan total harga
+        displayTotalPrice();
+    }
+
+    // Fungsi untuk menghapus item dari keranjang
+    function removeFromCart(productId) {
+        cart = cart.filter(function(item) {
+            return item.id !== productId;
+        });
+        displayCartItems();
+    }
+
+    // Fungsi untuk menampilkan total harga di keranjang
+    function displayTotalPrice() {
+        var total = cart.reduce(function(sum, item) {
+            return sum + item.price;
+        }, 0);
+        var checkoutButton = document.getElementById('checkoutButton');
+        checkoutButton.innerText = `Checkout - Rp. ${total}`;
+    }
+
+    // Fungsi untuk mencari produk
+    function searchProducts() {
+        var searchInput = document.getElementById('searchInput').value.toLowerCase();
+        var products = document.querySelectorAll('.col');
+        products.forEach(function(product) {
+            var productName = product.querySelector('.product-name').textContent.toLowerCase();
+            product.style.display = productName.includes(searchInput) ? 'block' : 'none';
+        });
+    }
+
+    // Fungsi untuk menyortir produk berdasarkan kategori
     function sortMenuByCategory() {
         var selectElement = document.querySelector('select[name="menu_khas"]');
         var selectedCategory = selectElement.value.toLowerCase();
         var products = document.querySelectorAll('.col');
-
         products.forEach(function(product) {
             var productCategory = product.querySelector('.product-price').getAttribute('kategori').toLowerCase();
-
-            if (selectedCategory === 'semua' || productCategory === selectedCategory) {
-                product.style.display = 'block';
-            } else {
-                product.style.display = 'none';
-            }
+            product.style.display = (selectedCategory === 'semua' || productCategory === selectedCategory) ? 'block' : 'none';
         });
     }
 
+    // Event listeners
     document.querySelector('select[name="menu_khas"]').addEventListener('change', sortMenuByCategory);
-    sortMenuByCategory(); // Call the function initially to filter based on the default category.
+    document.getElementById('uploadProductForm').addEventListener('submit', uploadProduct);
+    window.onload = fetchProducts; // Panggil saat halaman dimuat
 
-    function searchProducts() {
-        // Dapatkan kata kunci pencarian dari input
-        var searchInput = document.getElementById('searchInput').value.toLowerCase();
-        
-        // Dapatkan semua elemen produk
-        var products = document.querySelectorAll('.col');
+    // Fungsi untuk mengupload produk
+    function uploadProduct(event) {
+        event.preventDefault(); // Mencegah reload halaman
+        var name = document.getElementById('productName').value;
+        var category = document.getElementById('productCategory').value;
+        var price = document.getElementById('productPrice').value;
+        var imageFile = document.getElementById('productImage').files[0];
+        var imageRef = storage.child(imageFile.name);
 
-        // Loop melalui produk dan periksa apakah nama produk cocok dengan kata kunci pencarian
-        products.forEach(function(product) {
-            var productName = product.querySelector('.product-name').textContent.toLowerCase();
-
-            if (productName.includes(searchInput)) {
-                product.style.display = 'block'; // Tampilkan produk yang cocok
-            } else {
-                product.style.display = 'none'; // Sembunyikan produk yang tidak cocok
-            }
+        imageRef.put(imageFile).then(function(snapshot) {
+            imageRef.getDownloadURL().then(function(url) {
+                var newProduct = {
+                    name: name,
+                    kategori: category,
+                    price: price,
+                    image: url
+                };
+                db.push(newProduct); // Menambahkan produk baru ke database
+                fetchProducts(); // Refresh daftar produk
+            });
+        }).catch(function(error) {
+            console.error("Error uploading product: ", error);
         });
     }
 </script>
-
 </body>
 </html>

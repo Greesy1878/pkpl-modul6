@@ -1,0 +1,338 @@
+* {
+font-family: Century Gothic;
+  box-sizing: border-box;
+}
+
+html {
+	height: 100vh;
+	background-size: cover;
+	background-position: center;
+}
+body {
+	margin: 0;
+	padding: 0;
+}
+
+
+
+body {
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+
+header {
+  background-image: linear-gradient(rgba(0,0,0,0.4),rgba(0,0,0,0.4)), url(img/header/homepage.jpg);
+  height: 100vh;
+  background-size: cover;
+  background-position: center;
+}
+
+
+.navbar {
+    overflow: hidden;
+    background-color: white;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1;
+  }
+  
+  .navbar a {
+    float: right;
+    display: block;
+    color: black;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+    font-size: 17px;
+    font-weight: normal;
+  }
+  
+  .navbar span {
+    color: rgb(240, 156, 156);
+  }
+  
+  .navbar a:hover {
+    color: rgb(240, 156, 156);
+  }
+
+  .dropdown:hover {
+height: 150px;
+  }
+
+  .dropdown {
+    float: right;
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown-content {
+  float: left;
+    display: none;
+    position: absolute;
+    background-color:  white;
+    margin-top: 50px;
+    margin-left: -1137px;
+    width: 1500px;
+    height: 150px;
+    z-index: 1;
+    color: white;
+}
+
+
+
+
+.dropdown-content a {
+  color: white;
+  float: left;
+ }
+
+ .posisidropdown1{
+  position: absolute;
+  top: 16%;
+  left: 39%;
+}
+
+.posisidropdown2{
+position: absolute;
+top: 16%;
+left: 47%;
+}
+
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+  .geser {
+	margin-right: 35px;
+}
+
+.navbar img{
+	width: 70px;
+	height: 30px;
+	margin-top: 10px;
+	margin-left: 45px;
+}
+
+
+.besar {
+	width: 1349px;
+	margin-top: -69px;
+	margin-left: -30px;
+
+}
+
+.back{
+  position: absolute;
+	top: 35%;
+	left: 32%;
+	width: 528px;
+  height: 252px;
+  
+}
+
+
+
+
+nav ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.navbar a {
+  float: right;
+  display: block;
+  color: black;
+  text-align: center;
+  padding: 14px 13px;
+  text-decoration: none;
+  font-size: 17px;
+}
+
+article {
+  float: left;
+  position: relative;
+  padding: 20px;
+  width: 100%;
+  background-color: #F7F5F6;
+  height: auto; 
+}
+
+section:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+article h1 {
+	margin-top: 30px;
+	font-size: 25pt;
+}
+
+
+article img {
+	width: 190px;
+	height: auto;
+	float: left;
+	margin-top: 50px;
+	margin-left: 190px;
+}
+
+.atas{
+	margin-top: 50px;
+	}
+
+.posisi1 {
+	
+	text-align: center;
+	margin-top: 22%;
+	margin-left: -56%;
+	font-size: 12pt;
+}
+
+.posisi2 {
+	
+	text-align: center;
+	margin-top:-8%;
+	margin-left: 2%;
+	font-size: 12pt;
+}
+
+.posisi3 {
+	
+	text-align: center;
+	margin-top: -8%;
+	margin-left: 61%;
+	font-size: 12pt;
+}
+
+
+footer {
+  background-color: black;
+  padding: 10px;
+  height: 60px;
+  text-align: center;
+  color: white;
+  font-size: 12pt;
+}
+
+footer p {
+  margin-top: 8px;
+}
+
+
+@media (max-width: 600px) {
+  nav, article , img{
+     width: 100%;
+    height: auto;
+  }
+ 
+
+  .navbar a {
+    float: right;
+    display: block;
+    color: black;
+    text-align: center;
+    padding: 14px 13px;
+    text-decoration: none;
+    font-size: 15px;
+  }
+
+  .navbar img{
+    width: 50px;
+    height: 22px;
+    margin-top: 13px;
+    margin-left: 20px;
+  }
+
+.posisidropdown1{
+  position: absolute;
+  top: 16%;
+  left: 69%;
+}
+
+.posisidropdown2{
+position: absolute;
+top: 16%;
+left: 77%;
+}
+
+  .geser {
+    margin-right: 5px;
+  }
+
+  .back{
+    position: absolute;
+    top: 42%;
+    left: 7%;
+    width: 328px;
+    height: 160px;
+    
+  }
+
+  .besar {
+    width: 1349px;
+    margin-top: -69px;
+    margin-left: -450px;
+  
+  }
+
+  article img {
+    width: 150px;
+    height: 150px;
+    float: left;
+    margin-top: 150px;
+    margin-left: 90px;
+  }
+
+  article {
+    float: left;
+    padding: 20px;
+    width: 100%;
+    background-color: #F7F5F6;
+    height: 1070px; 
+  }
+
+  article h1 {
+    margin-top: 30px;
+    font-size: 18pt;
+  }
+
+  .atas{
+    margin-top: 30px;
+    }
+
+
+    .posisi1 {
+      position: absolute;
+      text-align: center;
+      margin-top: 190px;
+      margin-left: 63px;
+      font-size: 10pt;
+    }
+    
+    .posisi2 {
+      position: absolute;
+      text-align: center;
+      margin-top: 490px;
+      margin-left: 63px;
+      font-size: 10pt;
+    }
+    
+    .posisi3 {
+      position: absolute;
+      text-align: center;
+      margin-top: 790px;
+      margin-left: 73px;
+      font-size: 10pt;
+    }
+
+  footer {
+    background-color: black;
+    padding: 10px;
+    height: 50px;
+    text-align: center;
+    color: white;
+    font-size: 10pt;
+  }
+}
+

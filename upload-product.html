@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Upload Produk</title>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+    <script>
+        // Konfigurasi Firebase
+        const firebaseConfig = {
+        apiKey: "AIzaSyBef-U-wEVon3pBL9_OJZmO_aUCGcqClmM",
+        authDomain: "pkpl-b9107.firebaseapp.com",
+        projectId: "pkpl-b9107",
+        storageBucket: "pkpl-b9107.appspot.com",
+        messagingSenderId: "102677199151",
+        appId: "1:102677199151:web:03dded143f259ec35b89da"
+        };
+        firebase.initializeApp(firebaseConfig);
+
+        // Periksa apakah admin sudah login
+        firebase.auth().onAuthStateChanged(function (user) {
+            if (!user) {
+                window.location.href = 'admin-login.html'; // Jika belum login, arahkan ke halaman login
+            }
+        });
+    </script>
+</head>
+<body>
+    <h2>Upload Produk Baru</h2>
+    <form id="productUploadForm">
+        <label for="productName">Nama Produk</label>
+        <input type="text" id="productName" required>
+        <label for="productPrice">Harga Produk</label>
+        <input type="number" id="productPrice" required>
+        <label for="productImage">URL Gambar Produk</label>
+        <input type="text" id="productImage" required>
+        <button type="submit">Upload Produk</button>
+    </form>
+
+    <script>
+        const productUploadForm = document.getElementById('productUploadForm');
+        
+        // Upload Produk ke Firebase Database
+        productUploadForm.addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            const productName = document.getElementById('productName').value;
+            const productPrice = document.getElementById('productPrice').value;
+            const productImage = document.getElementById('productImage').value;
+
+            const newProductKey = firebase.database().ref().child('products').push().key;
+
+            const productData = {
+                name: productName,
+                price: productPrice,
+                image: productImage
+            };
+
+            let updates = {};
+            updates['/products/' + newProductKey] = productData;
+
+            firebase.database().ref().update(updates)
+                .then(() => {
+                    alert('Produk berhasil diupload!');
+                    productUploadForm.reset(); // Reset form setelah upload
+                })
+                .catch((error) => {
+                    alert('Gagal upload produk: ' + error.message);
+                });
+        });
+    </script>
+</body>
+</html>
