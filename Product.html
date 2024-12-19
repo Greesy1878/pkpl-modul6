@@ -9,7 +9,6 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfZ2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct" crossorigin="anonymous"></script>
-    
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
@@ -62,10 +61,11 @@
     </select>
 </div>
 
+<!-- Form Upload Produk -->
 <div class="upload-container">
     <h2>Upload Product</h2>
     <form id="uploadProductForm" enctype="multipart/form-data">
-        <input type="text" id="productName" placeholder="Nama Produk" required>
+        <input type="text" id="productName" placeholder="Nama Produk" required minlength="4" maxlength="12">
         
         <select id="productCategory" required>
             <option value="" disabled selected>Pilih Kategori</option>
@@ -78,12 +78,13 @@
             <option value="Jepara">Jepara</option>
         </select>
         
-        <input type="number" id="productPrice" placeholder="Harga" required>
+        <input type="number" id="productPrice" placeholder="Harga" required minlength="4" maxlength="12">
         <input type="file" id="productImage" accept="image/*" required>
         
         <button type="submit">Upload Produk</button>
     </form>
 </div>
+
 
 <div class="food-container" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 20px; justify-items: center;">
     <!-- Produk yang diambil dari Firebase akan ditampilkan di sini -->
@@ -172,127 +173,105 @@
                     productHTML += '</div>';
                     productHTML += '</div>';
                 }
-                $(".food-container").html(productHTML); // Masukkan ke dalam container produk
+                
+                // Tambahkan produk 4-12 secara manual
+                const additionalProducts = [
+                    { name: "Kopi Arabika Premium", price: 50000, image: "Image/produk4.jpg", kategori: "Minuman" },
+                    { name: "Teh Hijau Organik", price: 30000, image: "Image/produk5.jpg", kategori: "Minuman" },
+                    { name: "Keripik Singkong Pedas", price: 25000, image: "Image/produk6.jpg", kategori: "Cemilan" },
+                    { name: "Kue Cubir Coklat", price: 15000, image: "Image/produk7.jpg", kategori: "Kue" },
+                    { name: "Roti Bakar Klasik", price: 20000, image: "Image/produk8.jpg", kategori: "Kue" },
+                    { name: "Sambal Terasi Spesial", price: 10000, image: "Image/produk9.jpg", kategori: "Sambal" },
+                    { name: "Madu Hutan Asli", price: 60000, image: "Image/produk10.jpg", kategori: "Madu" },
+                    { name: "Minuman Jeruk Segar", price: 12000, image: "Image/produk11.jpg", kategori: "Minuman" },
+                    { name: "Nasi Goreng Spesial", price: 35000, image: "Image/produk12.jpg", kategori: "Makanan" },
+                ];
 
-                // Tambahkan event listener untuk tombol "Tambah ke Keranjang"
-                $(".add-to-cart").click(function() {
-                    var productId = $(this).data("id");
-                    addToCart(productId);
+                additionalProducts.forEach(function(item) {
+                    productHTML += '<div class="col">';
+                    productHTML += '<img src="' + item.image + '" alt="' + item.name + '">';
+                    productHTML += '<div class="product-info">';
+                    productHTML += '<h3 class="product-name">' + item.name + '</h3>';
+                    productHTML += '<h4 class="product-price" kategori="' + item.kategori + '" data-price="' + item.price + '">Rp. ' + item.price + '</h4>';
+                    productHTML += '<button class="add-to-cart" data-id="' + item.name + '">Tambah ke Keranjang</button>';
+                    productHTML += '</div>';
+                    productHTML += '</div>';
                 });
-            })
-            .catch(function (error) {
-                console.error("Error fetching products: ", error);
+
+                $(".food-container").html(productHTML); // Masukkan ke dalam container produk
             });
     }
 
     // Fungsi untuk menambahkan produk ke keranjang
-    function addToCart(productId) {
-        db.child(productId).once("value").then(function(snapshot) {
-            var product = snapshot.val();
-            cart.push({
-                id: productId,
-                name: product.name,
-                price: product.price,
-                image: product.image
-            });
-            displayCartItems();
+    $(document).on("click", ".add-to-cart", function() {
+        const productId = $(this).data("id");
+        const productPrice = $(this).siblings(".product-price").data("price");
+        const productName = $(this).siblings(".product-name").text();
+
+        // Cek apakah produk sudah ada di keranjang
+        const existingProduct = cart.find(item => item.name === productName);
+        if (existingProduct) {
+            existingProduct.quantity += 1; // Tingkatkan jumlah produk
+        } else {
+            cart.push({ name: productName, price: productPrice, quantity: 1 }); // Tambahkan produk baru
+        }
+        updateCartDisplay();
+    });
+
+    // Fungsi untuk memperbarui tampilan keranjang belanja
+    function updateCartDisplay() {
+        const cartItemsContainer = $(".cart-items");
+        cartItemsContainer.empty(); // Kosongkan isi keranjang
+        cart.forEach(item => {
+            cartItemsContainer.append('<div>' + item.name + ' (Rp. ' + item.price + ') x ' + item.quantity + '</div>');
         });
     }
 
-    // Fungsi untuk menampilkan item di keranjang
-    function displayCartItems() {
-        var cartItemsContainer = document.querySelector('.cart-items');
-        cartItemsContainer.innerHTML = ''; // Kosongkan sebelumnya
-        cart.forEach(function(item) {
-            var itemDiv = document.createElement('div');
-            itemDiv.classList.add('cart-item');
-            itemDiv.innerHTML = `
-                <img src="${item.image}" alt="${item.name}" width="50">
-                <div>${item.name} - Rp. ${item.price}</div>
-                <button class="remove-from-cart" data-id="${item.id}">Hapus</button>
-            `;
-            cartItemsContainer.appendChild(itemDiv);
-        });
+    // Fungsi untuk menangani pengiriman formulir upload produk
+    $("#uploadProductForm").on("submit", function(event) {
+        event.preventDefault(); // Mencegah pengiriman formulir default
 
-        // Tambahkan event listener untuk tombol "Hapus" di keranjang
-        document.querySelectorAll('.remove-from-cart').forEach(function(button) {
-            button.addEventListener('click', function() {
-                var productId = this.dataset.id;
-                removeFromCart(productId);
-            });
-        });
+        const productName = $("#productName").val();
+        const productPrice = $("#productPrice").val();
+        const productCategory = $("#productCategory").val();
+        const productImageFile = document.getElementById("productImage").files[0];
 
-        // Tampilkan total harga
-        displayTotalPrice();
-    }
-
-    // Fungsi untuk menghapus item dari keranjang
-    function removeFromCart(productId) {
-        cart = cart.filter(function(item) {
-            return item.id !== productId;
-        });
-        displayCartItems();
-    }
-
-    // Fungsi untuk menampilkan total harga di keranjang
-    function displayTotalPrice() {
-        var total = cart.reduce(function(sum, item) {
-            return sum + item.price;
-        }, 0);
-        var checkoutButton = document.getElementById('checkoutButton');
-        checkoutButton.innerText = `Checkout - Rp. ${total}`;
-    }
-
-    // Fungsi untuk mencari produk
-    function searchProducts() {
-        var searchInput = document.getElementById('searchInput').value.toLowerCase();
-        var products = document.querySelectorAll('.col');
-        products.forEach(function(product) {
-            var productName = product.querySelector('.product-name').textContent.toLowerCase();
-            product.style.display = productName.includes(searchInput) ? 'block' : 'none';
-        });
-    }
-
-    // Fungsi untuk menyortir produk berdasarkan kategori
-    function sortMenuByCategory() {
-        var selectElement = document.querySelector('select[name="menu_khas"]');
-        var selectedCategory = selectElement.value.toLowerCase();
-        var products = document.querySelectorAll('.col');
-        products.forEach(function(product) {
-            var productCategory = product.querySelector('.product-price').getAttribute('kategori').toLowerCase();
-            product.style.display = (selectedCategory === 'semua' || productCategory === selectedCategory) ? 'block' : 'none';
-        });
-    }
-
-    // Event listeners
-    document.querySelector('select[name="menu_khas"]').addEventListener('change', sortMenuByCategory);
-    document.getElementById('uploadProductForm').addEventListener('submit', uploadProduct);
-    window.onload = fetchProducts; // Panggil saat halaman dimuat
-
-    // Fungsi untuk mengupload produk
-    function uploadProduct(event) {
-        event.preventDefault(); // Mencegah reload halaman
-        var name = document.getElementById('productName').value;
-        var category = document.getElementById('productCategory').value;
-        var price = document.getElementById('productPrice').value;
-        var imageFile = document.getElementById('productImage').files[0];
-        var imageRef = storage.child(imageFile.name);
-
-        imageRef.put(imageFile).then(function(snapshot) {
-            imageRef.getDownloadURL().then(function(url) {
-                var newProduct = {
-                    name: name,
-                    kategori: category,
-                    price: price,
+        // Upload gambar ke Firebase Storage
+        const imageRef = storage.child(productImageFile.name);
+        imageRef.put(productImageFile).then(() => {
+            imageRef.getDownloadURL().then(url => {
+                // Simpan produk ke Firebase Realtime Database
+                db.push({
+                    name: productName,
+                    price: productPrice,
+                    kategori: productCategory,
                     image: url
-                };
-                db.push(newProduct); // Menambahkan produk baru ke database
-                fetchProducts(); // Refresh daftar produk
+                }).then(() => {
+                    alert("Produk berhasil diupload!");
+                    fetchProducts(); // Segarkan tampilan produk
+                });
             });
-        }).catch(function(error) {
-            console.error("Error uploading product: ", error);
+        });
+    });
+
+    // Fungsi untuk mencari produk (sederhana)
+    function searchProducts() {
+        const searchTerm = $("#searchInput").val().toLowerCase();
+        $(".food-container .col").each(function() {
+            const productName = $(this).find(".product-name").text().toLowerCase();
+            if (productName.includes(searchTerm)) {
+                $(this).show();
+            } else {
+                $(this).hide();
+            }
         });
     }
+
+    // Ambil produk dari Firebase saat halaman dimuat
+    $(document).ready(function() {
+        fetchProducts();
+    });
 </script>
+
 </body>
 </html>

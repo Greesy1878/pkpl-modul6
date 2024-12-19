@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Indonary.id | Home</title>
+    <link rel="icon" href="Image/Logo merah.png" type="image" />
+    <link rel="stylesheet" href="css/style.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Lato:wght@100;300;400;700;900&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
+    />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-database.js"></script>
+    <script src="js/review.js"></script>
+  </head>
+  <body>
+    <!-----buat desain header------->
+    <div class="header">
+      <div class="navbar">
+        <div class="logo">
+          <a href="/"><img src="Image/Logo merah.png" width="57px" /></a>
+          <a href="/"><img src="Image/logo-putih.png" width="150px" /></a>
+        </div>
+        <nav>
+          <ul id="MenuItems">
+            <li><a href="Home.html">Home </a></li>
+            <li><a href="product.html">Product </a></li>
+            <li><a href="about.html">About Us </a></li>
+            <li><a href="contact.html">Contact Us </a></li>
+            <li><a href="index.html">Sign In </a></li>
+          </ul>
+        </nav>
+        <img src="Image/pngegg.png" class="menu-icon" onclick="menutoggle()" />
+      </div>
+    </div>
+
+    <!-----headline---->
+    <div class="offer">
+      <div class="row">
+        <div class="kolom-30">
+          <img src="Image/Logo merah.png" class="offer-img" />
+        </div>
+        <div class="kolom-70">
+          <img src="Image/Logo putih 2.png" class="offer-img" />
+          <h3>Menjelajahi Kelezatan Kuliner Nusantara</h3>
+          <br />
+          <p>
+            Selamat datang di Indonary, tempatnya para pecinta kuliner Nusantara
+            berkumpul untuk mengeksplorasi kekayaan rasa Indonesia! Indonary
+            adalah sebuah portal kuliner yang didedikasikan untuk menghadirkan
+            pengalaman kuliner Nusantara yang tak terlupakan. Dengan menyajikan
+            beragam hidangan dan cita rasa dari berbagai daerah di Indonesia,
+            kami mengajak Anda dalam perjalanan kuliner yang memikat.
+          </p>
+          <br />
+          <p>Apa yang Anda Temukan di Indonary?</p>
+          <span id="titik"></span>
+          <div id="informasi">
+            <li>
+              Resep-Resep Otentik: Di Indonary, kami mengumpulkan dan membagikan
+              resep-resep kuliner otentik dari seluruh Indonesia.
+            </li>
+            <br />
+            <li>
+              Cerita Kuliner: Setiap hidangan memiliki cerita uniknya sendiri.
+              Kami mengeksplorasi sejarah, asal-usul, dan konteks budaya di
+              balik setiap hidangan
+            </li>
+            <br />
+            <li>
+              Panduan Wisata Kuliner: Jika Anda ingin mencicipi kuliner
+              Nusantara secara langsung, kami juga menyediakan panduan wisata
+              kuliner. Temukan restoran, warung, atau pasar tradisional terbaik
+              di berbagai kota di Indonesia.
+            </li>
+            <br />
+            <li>
+              Artikel dan Berita Terkini: Kami menyediakan artikel dan berita
+              terkini seputar perkembangan kuliner di Indonesia. Dapatkan
+              informasi tentang tren makanan, festival kuliner, dan inovasi
+              terbaru dalam dunia kuliner.
+            </li>
+          </div>
+          <button onclick="BacaSembunyi()" id="lihat-selengkapnya">
+            Selengkapnya
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-----produk Terbaru----->    
+    <div class="team-title">
+      <h1>TOP MENU</h1>
+    </div>
+    <div class="small-container">
+      <div class="row">
+        <div class="top">
+          <img src="Image/menu-ayam betutu bali.jpg" />
+          <h4>Ayam Betutut Bali</h4>
+        </div>
+        <div class="top">
+          <img src="Image/Menu - coto makassar.png" />
+          <h4>Coto Makassar</h4>
+        </div>
+        <div class="top">
+          <img src="Image/Menu - horok.jpg" />
+          <h4>Horok</h4>
+        </div>
+        <div class="top">
+          <img src="Image/Menu - ronde.jpg" />
+          <h4>Ronde</h4>
+        </div>
+      </div>
+    </div>
+
+    <!--review-->
+    <h2 class="title">Review Pelanggan</h2>
+    <div id="reviews-container" class="container-review">
+      <!-- Anda dapat menambahkan lebih banyak ulasan pelanggan di sini -->
+    </div>
+
+    <!--formulir review-->
+    <h2 class="title">Tulis Review Anda</h2>
+    <form id="reviewForm">
+      <label for="name">Nama:</label>
+      <input type="text" id="name" name="name" required minlength="4" maxlength="12" /><br />
+
+      <label for="rating">Rating:</label>
+      <input
+        type="number"
+        id="rating"
+        name="rating"
+        min="1"
+        max="5"
+        required
+      /><br />
+
+      <label for="review">Ulasan:</label><br />
+      <textarea id="review" name="review" rows="4" required minlength="10" maxlength="255"></textarea><br />
+
+      <input type="submit" value="Submit Review" id="formButton" />
+    </form>
+
+    <!----brands---->
+    <h2 class="title">Payment</h2>
+    <div class="brands">
+      <div class="small-container">
+        <div class="row">
+          <div class="col-6">
+            <img src="Image/Logo_baru_BRImo.svg.png" width="70px" />
+          </div>
+          <div class="col-6">
+            <img src="Image/paypal.png" />
+          </div>
+          <div class="col-6">
+            <img src="Image/ovo.png" />
+          </div>
+          <div class="col-6">
+            <img src="Image/mastercard.png" />
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!---------footer----->
+    <div class="footer">
+      <div class="navbar-2">
+        <div class="footer-col-1">
+          <img src="Image/logo-putih.png" />
+        </div>
+        <div class="footer-col-2">
+          <h3>Contact Us</h3>
+          <ul>
+            <li>
+              <i class="fa fa-phone"></i>
+              <a href="wa.me/6285241542496"> +62 852 4154 2496</a>
+            </li>
+            <br />
+            <li>
+              <i class="fa fa-envelope"></i>
+              <a href="https://www.indonary.id"> indonary@gmail.com</a>
+            </li>
+          </ul>
+        </div>
+        <div class="footer-col-3">
+          <h3>Socials</h3>
+          <ul>
+            <li>
+              <i class="fa fa-instagram"></i>
+              <a href="https://www.instagram.com/indonary.id/"> @indonary.id</a>
+            </li>
+            <br />
+            <li>
+              <i class="fa fa-facebook"></i>
+              <a href="https://www.facebook.com/indonary.id/"> indonary.id</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!----java script toggle menu---->
+    <script>
+      var MenuItems = document.getElementById("MenuItems");
+      MenuItems.style.maxHeight = "0px";
+
+      function menutoggle() {
+        if (MenuItems.style.maxHeight === "0px") {
+          MenuItems.style.maxHeight = "200px";
+        } else {
+          MenuItems.style.maxHeight = "0px";
+        }
+      }
+    </script>
+    <script>
+      // JavaScript untuk menampilkan dan sembunyikan konten tambahan saat tombol ditekan
+      function BacaSembunyi() {
+        const tombolLihatSelengkapnya =
+          document.getElementById("lihat-selengkapnya");
+        const kontenSembunyi = document.getElementById("informasi");
+        if (kontenSembunyi.style.display === "none") {
+          kontenSembunyi.style.display = "block";
+          tombolLihatSelengkapnya.innerText = "Sembunyikan";
+        } else {
+          kontenSembunyi.style.display = "none";
+          tombolLihatSelengkapnya.innerText = "Selengkapnya";
+        }
+      }
+    </script>
+  </body>
+</html>

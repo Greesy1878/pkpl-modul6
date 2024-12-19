@@ -1,6 +1,7 @@
+// Import Firebase modules
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-app.js";
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-auth.js";
-import { getDatabase, ref, set, update } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-database.js";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-auth.js";
+import { getDatabase, ref, set, get, update } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-database.js";
 
 // Firebase configuration
 const firebaseConfig = {
@@ -17,50 +18,81 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const database = getDatabase(app);
-let signinButton = document.getElementById("signin-button");
-let signupButton = document.getElementById("signup-button");
 
-// Fungsi untuk validasi nama
+// Get buttons and input fields by ID
+const signinButton = document.getElementById("signin-button");
+const signupButton = document.getElementById("signup-button");
+
+// Validation functions
 function validateName(name) {
-    const nameRegex = /^[a-zA-Z\s]+$/; // Hanya huruf dan spasi
-    if (!nameRegex.test(name)) {
-        document.getElementById("name-error").innerText = "Nama: Hanya boleh huruf (tanpa angka dan tanda baca).";
+    const nameRegex = /^[a-zA-Z\s]+$/;
+    if (!nameRegex.test(name) || name.length < 4 || name.length > 12) {
+        document.getElementById("name-error").innerText = "Nama harus terdiri dari 4 sampai 12 huruf.";
         return false;
     } else {
-        document.getElementById("name-error").innerText = ""; // Kosongkan pesan kesalahan jika valid
+        document.getElementById("name-error").innerText = "";
         return true;
     }
 }
 
-// Fungsi untuk validasi nomor HP
-function validatePhone(nohp) {
-    const phoneRegex = /^\+62\d{10,13}$/; // Awalan +62, diikuti 10-13 angka
+async function validatePhone(nohp) {
+    const phoneRegex = /^\d{10,13}$/; // Matches 10-13 digits
     if (!phoneRegex.test(nohp)) {
-        document.getElementById("nohp-error").innerText = "No HP: Harus diawali dengan +62, minimal 12 angka, maksimal 15 angka.";
+        document.getElementById("nohp-error").innerText = "No HP harus memiliki panjang 10 sampai 13 digit angka.";
         return false;
     } else {
-        document.getElementById("nohp-error").innerText = "";
-        return true;
+        const userRef = ref(database, "users");
+        const snapshot = await get(userRef);
+        let phoneExists = false;
+
+        snapshot.forEach((childSnapshot) => {
+            const childData = childSnapshot.val();
+            if (childData.nohp === nohp) {
+                phoneExists = true;
+            }
+        });
+
+        if (phoneExists) {
+            document.getElementById("nohp-error").innerText = "No HP sudah terdaftar.";
+            return false;
+        } else {
+            document.getElementById("nohp-error").innerText = "";
+            return true;
+        }
     }
 }
 
-// Fungsi untuk validasi email
-function validateEmail(email) {
-    const emailRegex = /^[a-zA-Z0-9._%+-]+@gmail\.com$/; // Harus menggunakan @gmail.com
+
+async function validateEmail(email) {
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@gmail\.com$/;
     if (!emailRegex.test(email)) {
-        document.getElementById("email-error").innerText = "Email: Harus berakhiran dengan @gmail.com.";
+        document.getElementById("email-error").innerText = "Email harus berakhiran @gmail.com.";
         return false;
     } else {
-        document.getElementById("email-error").innerText = "";
-        return true;
+        const userRef = ref(database, "users");
+        const snapshot = await get(userRef);
+        let emailExists = false;
+
+        snapshot.forEach((childSnapshot) => {
+            const childData = childSnapshot.val();
+            if (childData.email === email) {
+                emailExists = true;
+            }
+        });
+
+        if (emailExists) {
+            document.getElementById("email-error").innerText = "Email sudah terdaftar.";
+            return false;
+        } else {
+            document.getElementById("email-error").innerText = "";
+            return true;
+        }
     }
 }
 
-// Fungsi untuk validasi password
 function validatePassword(password) {
-    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{6,}$/;
-    if (!passwordRegex.test(password)) {
-        document.getElementById("password-error").innerText = "Password: Harus berisi huruf besar, huruf kecil, dan angka, minimal 6 karakter.";
+    if (password.length < 6 || password.length > 8) {
+        document.getElementById("password-error").innerText = "Password harus 6 sampai 8 karakter.";
         return false;
     } else {
         document.getElementById("password-error").innerText = "";
@@ -68,105 +100,74 @@ function validatePassword(password) {
     }
 }
 
-// Event listener untuk signup
-document.getElementById("signup-button").addEventListener("click", (e) => {
-    e.preventDefault(); // Mencegah pengiriman form
-    let name = document.getElementById("name").value;
-    let nohp = document.getElementById("nohp").value;
-    let emailSignup = document.getElementById("email_signup").value;
-    let passwordSignup = document.getElementById("psw_signup").value;
 
-    let valid = true;
+// Event listener for signup
+signupButton.addEventListener("click", async (e) => {
+    e.preventDefault();
+    const name = document.getElementById("name").value;
+    const nohp = document.getElementById("nohp").value;
+    const emailSignup = document.getElementById("email_signup").value;
+    const passwordSignup = document.getElementById("psw_signup").value;
 
-    // Validasi input nama
-    if (!validateName(name)) valid = false;
+    const isValid = validateName(name) && await validatePhone(nohp) && await validateEmail(emailSignup) && validatePassword(passwordSignup);
 
-    // Validasi nomor HP
-    if (!validatePhone(nohp)) valid = false;
+    if (isValid) {
+        try {
+            const userCredential = await createUserWithEmailAndPassword(auth, emailSignup, passwordSignup);
+            const user = userCredential.user;
 
-    // Validasi email
-    if (!validateEmail(emailSignup)) valid = false;
-
-    // Validasi password
-    if (!validatePassword(passwordSignup)) valid = false;
-
-    // Jika semua validasi berhasil, lanjutkan proses signup Firebase
-    if (valid) {
-        createUserWithEmailAndPassword(auth, emailSignup, passwordSignup)
-            .then((userCredential) => {
-                const user = userCredential.user;
-
-                // Simpan data pengguna ke database
-                set(ref(database, "users/" + user.uid), {
-                    name: name,
-                    nohp: nohp,
-                    email: emailSignup,
-                })
-                .then(() => {
-                    alert("User telah sukses dibuat");
-                })
-                .catch((error) => {
-                    alert("Gagal menyimpan data: " + error.message);
-                });
-            })
-            .catch((error) => {
-                alert("Gagal registrasi: " + error.message);
+            await set(ref(database, "users/" + user.uid), {
+                name: name,
+                nohp: nohp,
+                email: emailSignup,
             });
+
+            alert("User berhasil dibuat");
+        } catch (error) {
+            alert("Gagal registrasi: " + error.message);
+        }
     }
 });
 
-// Event listener untuk signin
-signinButton.addEventListener("click", (e) => {
-    e.preventDefault(); // Mencegah pengiriman form
-    let emailSignin = document.getElementById("email_signin").value;
-    let passwordSignin = document.getElementById("psw_signin").value;
+// Event listener for signin
+signinButton.addEventListener("click", async (e) => {
+    e.preventDefault();
+    const emailSignin = document.getElementById("email_signin").value;
+    const passwordSignin = document.getElementById("psw_signin").value;
 
     let valid = true;
 
-    // Validasi email
+    // Check if email is empty
+    const emailError = document.getElementById("email-signin-error");
     if (emailSignin === "") {
-        document.getElementById("email-signin-error").innerText = "Email tidak boleh kosong.";
-        document.getElementById("email-alert").style.display = 'block'; // Tampilkan alert
+        emailError.style.display = "inline";
         valid = false;
     } else {
-        document.getElementById("email-signin-error").innerText = "";
-        document.getElementById("email-alert").style.display = 'none'; // Sembunyikan alert
+        emailError.style.display = "none";
     }
 
-    // Validasi password
+    // Check if password is empty
+    const passwordError = document.getElementById("password-signin-error");
     if (passwordSignin === "") {
-        document.getElementById("password-signin-error").innerText = "Password tidak boleh kosong.";
-        document.getElementById("password-alert").style.display = 'block'; // Tampilkan alert
+        passwordError.style.display = "inline";
         valid = false;
     } else {
-        document.getElementById("password-signin-error").innerText = "";
-        document.getElementById("password-alert").style.display = 'none'; // Sembunyikan alert
+        passwordError.style.display = "none";
     }
 
-    // Jika ada kesalahan, hentikan proses
-    if (!valid) {
-        return;
-    }
-
-    // Lakukan autentikasi
-    signInWithEmailAndPassword(auth, emailSignin, passwordSignin)
-        .then((userCredential) => {
+    if (valid) {
+        try {
+            const userCredential = await signInWithEmailAndPassword(auth, emailSignin, passwordSignin);
             const user = userCredential.user;
-            let lgDate = new Date();
-            update(ref(database, "users/" + user.uid), {
+            const lgDate = new Date();
+
+            await update(ref(database, "users/" + user.uid), {
                 last_login: lgDate
-            })
-            .then(() => {
-                window.location.href = "index.html"; // Redirect ke halaman utama
-            })
-            .catch((error) => {
-                alert("Gagal memperbarui data login: " + error.message);
             });
-        })
-        .catch((error) => {
-            // Tampilkan alert jika email tidak terdaftar atau password salah
-            document.getElementById("email-alert").style.display = 'block'; // Tampilkan alert email
-            document.getElementById("password-alert").style.display = 'block'; // Tampilkan alert password
+
+            window.location.href = "Home.html";
+        } catch (error) {
             alert("Gagal login: " + error.message);
-        });
+        }
+    }
 });
